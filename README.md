@@ -1,6 +1,6 @@
 <div align="center">
 
-# <a href="https://deno.land/x/dql" target="_blank"><img src="https://icns.deno.dev/deno.svg" alt="Deno" align="top" height="40" /> DQL</a>
+# [DQL](https://deno.land/x/dql)
 
 _**Web Scraping with Deno  –  DOM + GraphQL**_
 
