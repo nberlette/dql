@@ -1,0 +1,58 @@
+{
+  "importMap": "./import_map.json",
+  "compilerOptions": {
+    "strict": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "deno.window",
+      "deno.ns",
+      "dom",
+      "dom.iterable",
+      "dom.asynciterable"
+    ],
+    "types": [
+      "graphql",
+      "deno-dom",
+      "pqueue",
+      "./lib/types.d.ts"
+    ]
+  },
+  "fmt": {
+    "files": {
+      "exclude": [
+        ".devcontainer",
+        ".git*",
+        ".vscode",
+        "*.md",
+        "LICENSE"
+      ]
+    },
+    "options": {
+      "proseWrap": "preserve"
+    }
+  },
+  "lint": {
+    "files": {
+      "exclude": [
+        ".devcontainer",
+        ".git*",
+        ".vscode",
+        "*.md",
+        "LICENSE"
+      ]
+    },
+    "rules": {
+      "exclude": [
+        "no-explicit-any"
+      ]
+    }
+  },
+  "tasks": {
+    "dev": "deno run -A --unstable --watch=.,./tests,./lib serve.ts",
+    "serve": "deno run --allow-net --unstable serve.ts",
+    "test": "deno test -A --jobs 4",
+    "test:nocheck": "deno test -A --no-check --jobs 4",
+    "test:unstable": "deno test -A --unstable --jobs 4",
+    "test:unstable:nocheck": "deno test -A --unstable --no-check --jobs 4"
+  }
+}

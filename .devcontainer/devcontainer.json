@@ -1,0 +1,60 @@
+{
+  "name": "Deno",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "VARIANT": "bullseye"
+    }
+  },
+  "customizations": {
+    "codespaces": {
+      "repositories": {
+        "deno911/*": {
+          "permissions": "write-all"
+        },
+        "nberlette/*": {
+          "permissions": "write-all"
+        }
+      }
+    },
+    "vscode": {
+      "settings": {
+        "deno.enable": true,
+        "deno.lint": true,
+        "deno.unstable": true,
+        "deno.codeLens.test": true,
+        "deno.codeLens.implementations": true,
+        "deno.codeLens.references": true,
+        "deno.codeLens.referencesAllFunctions": true,
+        "editor.defaultFormatter": "denoland.vscode-deno",
+        "terminal.integrated.env.linux": {},
+        "git.enableCommitSigning": true
+      },
+      "extensions": [
+        "denoland.vscode-deno",
+        "GitHub.copilot-nightly",
+        "GitHub.copilot-labs",
+        "editorconfig.editorconfig",
+        "antfu.iconify",
+        "ClearTaxEngineering.jsontographqlschema",
+        "GraphQL.vscode-graphql",
+        "laurencebahiirwa.deno-std-lib-snippets",
+        "redhat.vscode-yaml",
+        "cschleiden.vscode-github-actions",
+        "salbert.comment-ts",
+        "vsls-contrib.gistfs"
+      ]
+    }
+  },
+  "remoteUser": "vscode",
+  "forwardPorts": [3000, 8000, 8080],
+  "postCreateCommand": "brew bundle install --global 2>/dev/null",
+  "features": {
+    "git": "latest",
+    "github-cli": "latest",
+    "sshd": "latest",
+    "homebrew": "latest",
+    "python": "latest",
+    "ruby": "3.1"
+  }
+}

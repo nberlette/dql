@@ -1,0 +1,19 @@
+{
+  "imports": {
+    "~/": "./",
+    "@/": "./",
+    "/": "./",
+    "~~/": "./",
+    "@@/": "./",
+    "./": "./",
+    "x/": "https://deno.land/x/",
+    "std/": "https://deno.land/std@0.145.0/",
+    "lib/": "./lib/",
+    "esm/": "https://esm.sh/",
+    "graphql": "https://deno.land/x/graphql_deno@v15.0.0/mod.ts",
+    "graphql/": "https://deno.land/x/graphql_deno@v15.0.0/",
+    "pqueue": "https://deno.land/x/p_queue@1.0.1/mod.ts",
+    "deno-dom": "https://deno.land/x/deno_dom@v0.1.31-alpha/deno-dom-wasm.ts",
+    "sift": "https://deno.land/x/sift@0.5.0/mod.tsx"
+  }
+}

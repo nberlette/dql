@@ -1,0 +1,61 @@
+image: nberlette/gitpod-enhanced:latest
+
+tasks:
+  - # WARNING: remove this if you share your workspaces!
+    before: |
+      cd "$GITPOD_REPO_ROOT" || exit $?;
+      [ -n "$DOTENV_VAULT" ] && [ ! -e .env.vault ] &&
+        echo "DOTENV_VAULT=$DOTENV_VAULT" > .env.vault;
+      [ -n "$DOTENV_ME" ] && [ ! -e .env.me ] &&
+        echo "DOTENV_ME=$DOTENV_ME" > .env.me;
+      if [ -e .env.me ] && [ -e .env.vault ] && [ ! -e .env ]; then
+        which dotenv-vault &>/dev/null &&
+          dotenv-vault pull || npx -y dotenv-vault@latest pull;
+        # expose the .env variables to current environment
+        [ -e .env ] && { set -a; source .env; set +a; }
+      fi
+    # make sure we have deno installed
+    init: |
+      export DENO_INSTALL_ROOT="$HOME/.deno/bin"
+      export PATH="$DENO_INSTALL_ROOT:$PATH"
+      which deno &>/dev/null || brew install deno --quiet --overwrite
+      gp sync-done listo
+  - # proceed once we are ready
+    init: gp sync-await listo
+    command: deno task dev 2>&1 || deno task
+
+ports:
+  - name: "Develop"
+    port: 8000
+    visibility: private
+    onOpen: open-preview
+  - name: "Preview"
+    port: 8080
+    visibility: public
+    onOpen: notify
+
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
+    pullRequestsFromForks: true
+    addLabel: true
+    addBadge: true
+    addCheck: true
+
+vscode:
+  extensions:
+    - github.copilot-nightly
+    - GitHub.copilot-labs
+    - denoland.vscode-deno
+    - vsls-contrib.gistfs
+    - github.vscode-codeql
+    - cschleiden.vscode-github-actions
+    - editorconfig.editorconfig
+    - jock.svg
+    - antfu.iconify
+    - antfu.unocss
+    - redhat.vscode-yaml
+    - jacano.vscode-pnpm
+    - christian-kohler.path-intellisense

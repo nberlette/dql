@@ -1,0 +1,79 @@
+name: "Deno CI"
+on:
+  workflow_dispatch:
+  repository_dispatch:
+  push:
+    branches:
+      - "main"
+      - "master"
+      - "feat/**"
+      - "feature/**"
+      - "release/**"
+    tags:
+      - "v*"
+  pull_request:
+    branches:
+      - "main"
+      - "master"
+jobs:
+  format:
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest]
+        deno-version: [1.x]
+    name: "Format + Lint - 🦕 ${{matrix.deno-version}} on 💽 ${{matrix.os}}"
+    runs-on: ${{matrix.os}}
+    steps:
+      -
+        name: "🔧 setup: checkout"
+        uses: actions/checkout@v3
+      -
+        name: "🔧 setup: 🦕 ${{matrix.deno-version}}"
+        uses: denoland/setup-deno@main
+        with:
+          deno-version: ${{matrix.deno-version}}
+      -
+        name: "🎨 run deno fmt"
+        run: |
+          deno fmt --unstable \
+                   --no-clear-screen \
+                   --options-line-width 100 \
+                   --options-prose-wrap preserve \
+                   --ignore=.devcontainer,.github,.vscode ;
+      -
+        name: "🚨 run deno lint"
+        run: |
+          deno lint --unstable \
+                    --no-clear-screen \
+                    --ignore=.devcontainer,.github,.vscode \
+                    --rules-exclude=no-explicit-any,no-empty-interface,no-cond-assign
+  test:
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        deno-version: [1.16.0, 1.22.0, canary]
+    name: "Test - 🦕 ${{matrix.deno-version}} on 💽 ${{matrix.os}}"
+    runs-on: ${{matrix.os}}
+    steps:
+      -
+        name: "🔧 setup: checkout"
+        uses: actions/checkout@v3
+      -
+        name: "🔧 setup: 🦕 ${{matrix.deno-version}}"
+        uses: denoland/setup-deno@main
+        with:
+          deno-version: ${{matrix.deno-version}}
+      -
+        name: "🧪 test: stable + checks"
+        run: deno test -A --check --no-check=remote --jobs 4
+      -
+        name: "🧪 test: stable, no-checks"
+        run: deno test -A --no-check --jobs 4
+      -
+        name: "🧪 test: unstable + checks"
+        run: deno test -A --check --no-check=remote --unstable --jobs 4
+      -
+        name: "🧪 test: unstable, no-checks"
+        run: deno test -A --unstable --no-check --jobs 4

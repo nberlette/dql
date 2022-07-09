@@ -1,0 +1,9 @@
+.DS_Store
+Thumbs.db
+*.log
+.*.log
+.env*
+!.env.vault
+*.*workspace
+package.json
+test.ts
