@@ -1,2 +1,2 @@
-export * from "~/lib/server.ts";
-export * from "~/lib/query.ts";
+export { createServer } from "./lib/server.ts";
+export { useQuery } from "./lib/query.ts";
