@@ -14,7 +14,7 @@ import { TElement } from "./element.ts";
 export const shared: GraphQLFieldConfigMap<Element, any> = {
   index: {
     type: GraphQLInt,
-    description: "Node index from parent element",
+    description: "The node index number of the element (starting from 0).",
     args: { parent: selector },
     resolve(element: Element, { parent }: IndexParams, context: TContext) {
       if (parent) {
@@ -43,7 +43,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   content: {
     type: GraphQLString,
-    description: "The HTML content of the subnodes",
+    description: "The innerHTML content of the selected DOM node",
     args: { selector },
     resolve(element, { selector }: ElementParams) {
       element = selector ? element.querySelector(selector)! : element;
@@ -52,7 +52,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   html: {
     type: GraphQLString,
-    description: "The HTML content of the selected DOM node",
+    description: "The outerHTML content of the selected DOM node",
     args: { selector },
     resolve(element: Element, { selector }: ElementParams) {
       element = selector ? element.querySelector(selector)! : element;
@@ -67,7 +67,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
       selector,
       trim: {
         type: GraphQLBoolean,
-        description: "Optional text trim. default: false",
+        description: "Trim any leading and trailing whitespace from the value (optional, default: false)",
         defaultValue: false,
       },
     },
@@ -79,7 +79,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   table: {
     type: new GraphQLList(new GraphQLList(GraphQLString)),
-    description: "Get value from table rows",
+    description: "Returns a two-dimensional array representing an HTML table element's contents. The first level is a list of rows (`<tr>`), and each row is an array of cell (`<td>`) contents.",
     args: {
       selector,
     },
@@ -99,7 +99,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   tag: {
     type: GraphQLString,
-    description: "The tag name of the selected DOM node",
+    description: "The HTML tag name of the selected DOM node",
     args: { selector },
     resolve(element: Element, { selector }: ElementParams) {
       element = selector ? element.querySelector(selector)! : element;
@@ -109,7 +109,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   attr: {
     type: GraphQLString,
-    description: "An attribute of the selected node (eg. `href`, `src`, etc.).",
+    description: "The value of a given attribute from the selected node (`href`, `src`, etc.), if it exists.",
     args: {
       selector,
       name: {
@@ -133,7 +133,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   href: {
     type: GraphQLString,
-    description: "An href attribute of the selected node.",
+    description: "Shorthand for `attr(name: \"href\")`",
     args: {
       selector,
     },
@@ -146,7 +146,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   src: {
     type: GraphQLString,
-    description: "An src attribute of the selected node.",
+    description: "Shorthand for `attr(name: \"src\")`",
     args: {
       selector,
     },
@@ -159,7 +159,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   class: {
     type: GraphQLString,
-    description: "An class attribute of the selected node.",
+    description: "The class attribute of the selected node, if any exists. Formatted as a space-separated list of CSS class names.",
     args: {
       selector,
     },
@@ -172,7 +172,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   classList: {
     type: new GraphQLList(GraphQLString),
-    description: "An array of class from the selected node class attribute.",
+    description: "An array of CSS classes extracted from the selected node.",
     args: {
       selector,
     },
@@ -188,7 +188,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   has: {
     type: GraphQLBoolean,
-    description: "Returns true if an element with the given selector exists.",
+    description: "Returns true if an element with the given selector exists, otherwise false.",
     args: { selector },
     resolve(element: Element, { selector }: ElementParams) {
       return !!element.querySelector(selector!);
@@ -196,7 +196,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   count: {
     type: GraphQLInt,
-    description: "The count of the selected DOM node",
+    description: "Returns the number of DOM nodes that match the given selector, or 0 if no nodes match.",
     args: { selector },
     resolve(element: Element, { selector }: ElementParams) {
       if (!selector) return 0;
@@ -207,7 +207,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   query: {
     type: TElement,
     description:
-      "Equivalent to [Element.querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector). The selectors of any nested queries will be scoped to the resulting element.",
+      "Equivalent to `Element.querySelector`. The selectors of any nested queries will be scoped to the resulting element.",
     args: { selector },
     resolve(element: Element, { selector }: ElementParams) {
       return element.querySelector(selector!);
@@ -216,7 +216,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   queryAll: {
     type: new GraphQLList(TElement),
     description:
-      "Equivalent to [Element.querySelectorAll](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll). The selectors of any nested queries will be scoped to the resulting elements.",
+      "Equivalent to `Element.querySelectorAll`. The selectors of any nested queries will be scoped to the resulting elements.",
     args: { selector },
     resolve(element: Element, { selector }: ElementParams) {
       return Array.from(element.querySelectorAll(selector!));
@@ -224,21 +224,21 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   children: {
     type: new GraphQLList(TElement),
-    description: "An element's child elements.",
+    description: "Children elements (not nodes) of the selected node.",
     resolve(element: Element) {
       return Array.from(element.children);
     },
   },
   childNodes: {
     type: new GraphQLList(TElement),
-    description: "An element's child nodes. Includes text nodes.",
+    description: "Child nodes (not elements) of a selected node, including any text nodes.",
     resolve(element: Element) {
       return Array.from(element.childNodes);
     },
   },
   parent: {
     type: TElement,
-    description: "An element's parent element.",
+    description: "Parent Element of the selected node.",
     resolve(element: Element) {
       return element.parentElement;
     },
@@ -246,7 +246,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   siblings: {
     type: new GraphQLList(TElement),
     description:
-      "All elements which are at the same level in the tree as the current element, ie. the children of the current element's parent. Includes the current element.",
+      "All elements at the same level in the tree as the current element, as well as the element itself. Equivalent to `Element.parentElement.children`.",
     resolve(element: Element) {
       const parent = element.parentElement;
       if (parent == null) return [element];
@@ -257,7 +257,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   next: {
     type: TElement,
     description:
-      "The current element's next sibling. Includes text nodes. Equivalent to [Node.nextSibling](https://developer.mozilla.org/en-US/docs/Web/API/Node/nextSibling).",
+      "Current element's next sibling, including any text nodes. Equivalent to `Node.nextSibling`.",
     resolve(element: Element) {
       return element.nextSibling;
     },
@@ -280,7 +280,7 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   previous: {
     type: TElement,
     description:
-      "The current element's previous sibling. Includes text nodes. Equivalent to [Node.previousSibling](https://developer.mozilla.org/en-US/docs/Web/API/Node/nextSibling).",
+      "Current Element's previous sibling, including any text nodes. Equivalent to `Node.previousSibling`.",
     resolve(element: Element) {
       return element.previousSibling;
     },
