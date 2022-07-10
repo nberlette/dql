@@ -1,6 +1,3 @@
-/// <reference types="pqueue" />
-/// <reference types="graphql" />
-/// <reference types="deno-dom" />
 /// <reference lib="es2022" />
 /// <reference lib="dom" />
 /// <reference lib="deno.window" />

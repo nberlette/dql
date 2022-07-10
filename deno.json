@@ -11,9 +11,9 @@
       "dom.asynciterable"
     ],
     "types": [
-      "graphql",
-      "deno-dom",
-      "pqueue",
+      "https://deno.land/x/graphql_deno@v15.0.0/mod.ts",
+      "https://deno.land/x/deno_dom@v0.1.31-alpha/deno-dom-wasm.ts",
+      "https://deno.land/x/p_queue@1.0.1/mod.ts",
       "./lib/types.d.ts"
     ]
   },
