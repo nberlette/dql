@@ -5,7 +5,7 @@ import {
   type GraphQLObjectTypeConfig,
   GraphQLString,
   PQueue,
-} from "~/deps.ts";
+} from "../deps.ts";
 import { getAttributeOfElement, resolveURL } from "./helpers.ts";
 import { TNode } from "./node.ts";
 import { TDocument } from "./document.ts";

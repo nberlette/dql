@@ -2,7 +2,7 @@ import {
   Element,
   GraphQLInterfaceType,
   type GraphQLInterfaceTypeConfig,
-} from "~/deps.ts";
+} from "../deps.ts";
 import { shared } from "./shared.ts";
 
 export const TNode = new GraphQLInterfaceType({

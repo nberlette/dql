@@ -1,4 +1,4 @@
-import { serve } from "~/deps.ts";
+import { serve } from "../deps.ts";
 import { useQuery } from "./query.ts";
 
 export const prismqlPlayground = (_port: string | number, endpoint: string) => {

@@ -4,7 +4,7 @@ import {
   type GraphQLObjectTypeConfig,
   GraphQLSchema,
   GraphQLString,
-} from "~/deps.ts";
+} from "../deps.ts";
 import { TDocument } from "./document.ts";
 
 export const schema = new GraphQLSchema({

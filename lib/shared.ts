@@ -6,7 +6,7 @@ import {
   GraphQLList,
   GraphQLNonNull,
   GraphQLString,
-} from "~/deps.ts";
+} from "../deps.ts";
 import { selector } from "./selector.ts";
 import { getAttributeOfElement } from "./helpers.ts";
 import { TElement } from "./element.ts";

@@ -3,7 +3,7 @@ import {
   GraphQLObjectType,
   type GraphQLObjectTypeConfig,
   GraphQLString,
-} from "~/deps.ts";
+} from "../deps.ts";
 import { shared } from "./shared.ts";
 import { TNode } from "./node.ts";
 import { getAttributeOfElement } from "./helpers.ts";

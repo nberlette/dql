@@ -1,4 +1,4 @@
-import { Element } from "~/deps.ts";
+import { Element } from "../deps.ts";
 
 export function getAttributeOfElement(element: Element, name: string) {
   const attribute = element.getAttribute(name);

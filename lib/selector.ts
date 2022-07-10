@@ -1,4 +1,4 @@
-import { GraphQLString } from "~/deps.ts";
+import { GraphQLString } from "../deps.ts";
 
 export const selector = {
   type: GraphQLString,

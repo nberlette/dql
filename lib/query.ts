@@ -1,4 +1,4 @@
-import { graphql, PQueue } from "~/deps.ts";
+import { graphql, PQueue } from "../deps.ts";
 import { State } from "./state.ts";
 import { schema } from "./schema.ts";
 

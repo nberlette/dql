@@ -35,7 +35,7 @@ Deno.test("state #4", () => {
 });
 
 Deno.test("state null and undefined #5", () => {
-  const state = new State<null>();
+  const state = new State();
 
   state.set("test-state-1", null);
   state.set("test-state-2", undefined);
