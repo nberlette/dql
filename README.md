@@ -1,14 +1,14 @@
 <div align="center">
 
-# [DQL](https://deno.land/x/dql)  
+# [DQL](https://deno.land/x/dql)
 
 ### _**Web Scraping with Deno  –  DOM + GraphQL**_
 
 </div>
 
----  
+---
 
-**`DQL`** lets you use GraphQL queries to extract data from the DOM of a web page or HTML fragment (for sandboxing or use cases without network access). It accepts [**GraphQL Queries**](https://graphql.org/learn/queries) as input, and returns formatted JSON data as output.  
+**`DQL`** lets you use GraphQL queries to extract data from the DOM of a web page or HTML fragment (for sandboxing or use cases without network access). It accepts [**GraphQL Queries**](https://graphql.org/learn/queries) as input, and returns formatted JSON data as output.
 
 > - [**Try out a real-world example of `useQuery` in the `Deno Playground`**](https://dash.deno.com/playground/dql)
 > - [**View the example's JSON endpoint at `dql.deno.dev`**](https://dql.deno.dev)
@@ -64,7 +64,6 @@ const data = await useQuery(`query { ... }`, {
 });
 ```
 
-
 ## GraphQL Playground
 
 ### Deno Deploy
@@ -80,7 +79,6 @@ createServer(80, { endpoint: "https://dirty-sparrow-69.deno.dev" });
 
 > - [**Try it out at `dirty-sparrow-69.deno.dev`**](https://dirty-sparrow-69.deno.dev)
 > - [**View the public code in the `Deno Playground`**](https://dash.deno.com/playground/dirty-sparrow-69)
-
 
 ### Command Line Usage (CLI)
 
@@ -112,8 +110,8 @@ createServer(3000);
 
 ### Junkyard Inventory Scraper
 
-> - [**Try it for yourself in the `Deno Playground`**](https://dash.deno.com/playground/dql)  
-> - [**View the JSON endpoint at `dql.deno.dev`**](https://dql.deno.dev)  
+> - [**Try it for yourself in the `Deno Playground`**](https://dash.deno.com/playground/dql)
+> - [**View the JSON endpoint at `dql.deno.dev`**](https://dql.deno.dev)
 
 ```ts
 import { useQuery } from "https://deno.land/x/dql/mod.ts";
