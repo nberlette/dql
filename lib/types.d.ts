@@ -48,6 +48,7 @@ interface QueryOptions {
   concurrency?: number;
   fetch_options?: RequestInit;
   variables?: Variables;
+  operationName?: string;
 }
 
 interface IOptional {

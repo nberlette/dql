@@ -8,6 +8,7 @@ const defaults: QueryOptions = {
     // ...
   },
   variables: {},
+  operationName: undefined,
 };
 
 export const useQuery = (query: string, options?: QueryOptions) => {
@@ -15,6 +16,7 @@ export const useQuery = (query: string, options?: QueryOptions) => {
     concurrency,
     fetch_options,
     variables = {},
+    operationName,
   } = { ...defaults, ...options };
 
   const state = new State<any>();
@@ -22,5 +24,5 @@ export const useQuery = (query: string, options?: QueryOptions) => {
 
   state.set("queue", queue);
   state.set("fetch_options", fetch_options);
-  return graphql(schema, query, {}, { state }, variables);
+  return graphql(schema, query, {}, { state }, variables, operationName);
 };

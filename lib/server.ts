@@ -24,8 +24,17 @@ export function createServer(port: string | number = 8080, option?: IOptional) {
         return new Response(graphqlPlayground(endpoint), htmlResponseInit);
       }
       case "POST": {
-        const { query, variables = {} } = await req.json();
-        const response = await useQuery(query, { variables });
+        const {
+          query,
+          variables = {},
+          operationName = undefined,
+        } = await req.json();
+
+        const response = await useQuery(query, {
+          variables,
+          operationName,
+        });
+
         return new Response(
           JSON.stringify(response, null, 2),
           jsonResponseInit,
