@@ -1,10 +1,10 @@
 import {
-  GraphQLString,
-  GraphQLNonNull,
-  GraphQLBoolean,
   Element,
-  selector,
   getAttributeOfElement,
+  GraphQLBoolean,
+  GraphQLNonNull,
+  GraphQLString,
+  selector,
 } from "./deps.ts";
 
 export const attr = {

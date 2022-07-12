@@ -1,9 +1,9 @@
 import {
-  GraphQLString,
-  GraphQLBoolean,
-  getAttributeOfElement,
-  selector,
   type Element,
+  getAttributeOfElement,
+  GraphQLBoolean,
+  GraphQLString,
+  selector,
   type TextParams,
 } from "./deps.ts";
 

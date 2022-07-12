@@ -1,4 +1,4 @@
-import { GraphQLList, TElement, type Element } from "./deps.ts";
+import { type Element, GraphQLList, TElement } from "./deps.ts";
 
 export const nextAll = {
   type: new GraphQLList(TElement),

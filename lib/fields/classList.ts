@@ -1,9 +1,9 @@
 import {
-  GraphQLString,
-  GraphQLList,
-  selector,
   type Element,
   type ElementParams,
+  GraphQLList,
+  GraphQLString,
+  selector,
 } from "./deps.ts";
 
 export const classList = {

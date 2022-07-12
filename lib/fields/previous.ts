@@ -1,4 +1,4 @@
-import { TElement, type Element } from "./deps.ts";
+import { type Element, TElement } from "./deps.ts";
 
 export const previous = {
   type: TElement,

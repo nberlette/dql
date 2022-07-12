@@ -8,4 +8,4 @@ export const content = {
     element = selector ? element.querySelector(selector)! : element;
     return element && element.innerHTML;
   },
-}
+};

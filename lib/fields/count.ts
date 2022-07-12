@@ -1,8 +1,8 @@
 import {
-  GraphQLInt,
-  selector,
   type Element,
   type ElementParams,
+  GraphQLInt,
+  selector,
 } from "./deps.ts";
 
 export const count = {

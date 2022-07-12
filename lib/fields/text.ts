@@ -1,8 +1,8 @@
 import {
+  type Element,
   GraphQLBoolean,
   GraphQLString,
   selector,
-  type Element,
   type TextParams,
 } from "./deps.ts";
 

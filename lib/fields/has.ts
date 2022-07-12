@@ -1,4 +1,9 @@
-import { GraphQLBoolean, selector, type Element, type ElementParams } from "./deps.ts";
+import {
+  type Element,
+  type ElementParams,
+  GraphQLBoolean,
+  selector,
+} from "./deps.ts";
 export const has = {
   type: GraphQLBoolean,
   description:

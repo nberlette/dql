@@ -1,9 +1,9 @@
 import {
-  GraphQLList,
-  TElement,
-  selector,
   type Element,
   type ElementParams,
+  GraphQLList,
+  selector,
+  TElement,
 } from "./deps.ts";
 
 export const queryAll = {

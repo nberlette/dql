@@ -1,8 +1,8 @@
 import {
-  TElement,
-  selector,
   type Element,
   type ElementParams,
+  selector,
+  TElement,
 } from "./deps.ts";
 
 export const query = {

@@ -1,8 +1,4 @@
-import {
-  GraphQLList,
-  TElement,
-  type Element,
-} from "./deps.ts";
+import { type Element, GraphQLList, TElement } from "./deps.ts";
 
 export const children = {
   type: new GraphQLList(TElement),

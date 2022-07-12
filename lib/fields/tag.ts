@@ -1,8 +1,8 @@
 import {
-  GraphQLString,
-  selector,
   type Element,
   type ElementParams,
+  GraphQLString,
+  selector,
 } from "./deps.ts";
 
 export const tag = {
