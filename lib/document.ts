@@ -38,7 +38,11 @@ export const TDocument = new GraphQLObjectType({
         if (!meta) {
           meta = element?.querySelector(`meta[property='${name}']`);
         }
-        return getAttributeOfElement(meta!, "content") ?? null;
+        try {
+          return getAttributeOfElement(meta!, "content");
+        } catch {
+          return null;
+        }
       },
     },
   }),

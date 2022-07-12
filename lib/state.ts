@@ -1,12 +1,19 @@
+export type StateInit<T extends any> =
+  | Iterable<[string, T]>
+  | Map<string, T>
+  | [string, T][]
+  | Record<string, T>;
+
 export class State<T = any> {
   private static $ = new Map<string, any>();
   private readonly $: Map<string, T>;
   private $deleted: Set<T>;
 
   /**
-   * Creates a new State instance with optional initial value.
-   * @param {StateInit} [initial] Initial state
-   * @returns {State<T>} a new State instance with optional initial value.
+   * Creates a new State instance, with optional initial value.
+   *
+   * @param initial (optional) Initial state
+   * @returns a new State instance with optional initial value.
    */
   constructor(initial: StateInit<T> = State.$) {
     if (initial && State.isObject(initial)) {
@@ -19,8 +26,9 @@ export class State<T = any> {
   }
 
   /**
-   * Converts the state into an object that can be understood by `JSON.stringify()`.
-   * @returns {Record<string,T>} an object literal representing the state.
+   * Converts state to an object that can be understood by `JSON.stringify`.
+   *
+   * @returns an object representing the state.
    * @example const state = new State([['a', 1], ['b', 2]]);
    * state.toJSON(); // { a: 1, b: 2 }
    * JSON.stringify(state); // { "a": 1, "b": 2 }
@@ -32,7 +40,8 @@ export class State<T = any> {
   /**
    * When calling `Object.prototype.toString` on a State instance, it returns
    * `[object State]` rather than the generic default `[object Object]`.
-   * @returns {'State'}
+   *
+   * @returns the string literal "State"
    */
   public get [Symbol.toStringTag](): "State" {
     return "State";
@@ -40,8 +49,9 @@ export class State<T = any> {
 
   /**
    * Test if a given value is a plain object, and not a function, array, etc.
+   *
    * @param obj The object to test.
-   * @returns {boolean} `true` if `obj` is an object literal, `false` otherwise.
+   * @returns `true` if `obj` is an object literal, `false` otherwise.
    */
   public static isObject<O extends Record<string, any>>(
     obj: unknown,
@@ -53,48 +63,126 @@ export class State<T = any> {
 
   /**
    * Add or update a value in a State instance by its associated key.
-   * @param key - the key (`string`) to set a value for
-   * @param value - can be any valid JavaScript value.
-   * @returns the `State` instance, for optional chaining
-   * @example const state = new State();
-   * state.set('a', 1); // { a: 1 }
-   * // `.set` returns the State instance for chaining:
-   * state.set('b', 2).set('c', 3); // { a: 1, b: 2, c: 3 }
+   *
+   * @param key The key (`string`) to add or update
+   * @param value The value to set for the given key
+   * @returns `State` instance, for optional chaining
+   *
+   * @example state.set('a', 1); // { a: 1 }
+   * @example state.set(['a', 'b'], 1); // { a: 1, b: 1 }
+   * @example state.set({ b: 2, c: 3 }).set('a', 1); // { a: 1, b: 2, c: 3 }
    */
-  public set<V extends T>(key: string | string[], value: V): State<T> {
-    [key].flat().forEach((k) => this.$.set(k, value));
+  public set<V extends T>(key: string, value: V): State<T>;
+
+  /**
+   * Add or update multiple keys to a specified value.
+   *
+   * @param key List of keys (`string[]`) to add or update
+   * @param value The value to set for the given keys
+   * @returns `State` instance, for optional chaining
+   * @example state.set(['a', 'b'], 1);
+   * // { a: 1, b: 1 }
+   * @example state.set({ a: 1, b: 2 });
+   * // { a: 1, b: 2 }
+   */
+  public set<V extends T>(key: string[], value: V): State<T>;
+
+  /**
+   * Add or update the values for multiple keys using an object of type `Record<string, V>`.
+   * @param key An object literal with the format `{ key: value }`
+   * @returns `State` instance, for optional chaining
+   * @example state.set({ b: 2, c: 3 }).set('a', 1); // { a: 1, b: 2, c: 3 }
+   */
+  public set<V extends T>(key: Record<string, V>): State<T>;
+  public set<V extends T>(key: any, value?: V): State<T> {
+    if (State.isObject<Record<string, V>>(key)) {
+      for (const k in key) {
+        this.$.set(k, key[k]);
+      }
+    } else if (value != null) {
+      if (typeof key === "string") {
+        this.$.set(key, value);
+      } else {
+        [key].flat().forEach((k) => this.$.set(k, value));
+      }
+    }
     return this;
   }
 
   /**
    * Returns the value associated with a key in a State instance.
-   * @param key - the key to lookup
-   * @returns the value associated with the key, or `undefined` if it does not exist.
+   * @param key the key to lookup
+   * @returns the value associated with the key (or `undefined`).
    */
-  public get<V extends T>(key: string): V {
-    return this.$.get(key) as V;
+  public get<V extends T>(key: string, defaultValue?: V): V;
+
+  /**
+   * Returns the values in a State instance for a list of keys.
+   * @param key array of keys to lookup
+   * @returns An array of the values for the given keys (or `undefined`).
+   */
+  public get<V extends T>(key: string[], defaultValue?: V): V[];
+  public get<V extends T>(key: string | string[], defaultValue?: V): V | V[] {
+    defaultValue ??= undefined;
+
+    if (Array.isArray(key)) {
+      return key.map((k) => (this.$.get(k) ?? defaultValue)) as V[];
+    }
+    return (this.$.get(key) ?? defaultValue) as V;
   }
 
   /**
    * Returns `true` if the State instance contains a value for the given key.
    * @param key - the key to lookup
-   * @returns `true` if the State contains a value for the given key, `false` otherwise.
-   * @example const state = new State([['a', 1], ['b', 2]]);
+   * @returns `true` if the key exists in State, `false` otherwise.
+   * @example const state = new State([['a', 1]]);
    * state.has('a'); // true
    * state.has('c'); // false
    */
-  public has(key: string): boolean {
+  public has(key: string): boolean;
+
+  /**
+   * Returns an object of `{ key: true | false }` format. Each property
+   * corresponds to a value from the provided list of keys, with the value
+   * being `true` if it exists in the State instance, or `false` if it does not.
+   * @param key - the keys to lookup
+   * @returns `Record<string, boolean>`
+   *
+   * @example const state = new State([['a', 1], ['b', 2]]);
+   * state.has(['a', 'b', 'c']) // { a: true, b: true, c: false }
+   */
+  public has(key: string[]): Record<string, boolean>;
+  public has(key: string | string[]): boolean | Record<string, boolean> {
+    if (Array.isArray(key)) {
+      return key.reduce((keys, k) => ({
+        ...(keys ?? {}),
+        [k]: this.has(k),
+      }), {} as Record<string, boolean>);
+    }
     return this.$.has(key);
   }
 
   /**
    * Delete a value from a State instance by its associated key.
+   *
    * @param key - the key to delete
    * @returns the `State` instance, for optional chaining
+   *
    * @example const state = new State([['a', 1], ['b', 2], ['c', 3]]);
    * state.delete('a'); // { b: 2, c: 3 }
-   * state.delete('b').delete('c'); // {}
+   * state.delete(['b', 'c']); // {}
    */
+  public delete(key: string): State<T>;
+
+  /**
+   * Delete multiple values from a State instance.
+   * @param key - the keys to delete
+   * @returns the `State` instance, for optional chaining
+   *
+   * @example const state = new State([['a', 1], ['b', 2], ['c', 3]]);
+   * state.delete(['a', 'b', 'c']); // {}
+   */
+  public delete(key: string[]): State<T>;
   public delete(key: string | string[]): State<T> {
     if (Array.isArray(key)) {
       key.forEach((k) => this.delete(k));

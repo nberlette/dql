@@ -67,7 +67,8 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
       selector,
       trim: {
         type: GraphQLBoolean,
-        description: "Trim any leading and trailing whitespace from the value (optional, default: false)",
+        description:
+          "Trim any leading and trailing whitespace from the value (optional, default: false)",
         defaultValue: false,
       },
     },
@@ -79,22 +80,30 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   table: {
     type: new GraphQLList(new GraphQLList(GraphQLString)),
-    description: "Returns a two-dimensional array representing an HTML table element's contents. The first level is a list of rows (`<tr>`), and each row is an array of cell (`<td>`) contents.",
+    description:
+      "Returns a two-dimensional array representing an HTML table element's contents. The first level is a list of rows (`<tr>`), and each row is an array of cell (`<td>`) contents.",
     args: {
       selector,
+      trim: {
+        type: GraphQLBoolean,
+        description:
+          "Trim any leading and trailing whitespace from the values (optional, default: false)",
+        defaultValue: false,
+      },
     },
-    resolve(element: Element, { selector }: ElementParams) {
+    resolve(element: Element, { selector, trim }: TextParams) {
       element = selector ? element.querySelector(selector)! : element;
 
       const result = element && Array.from(
         element.querySelectorAll("tr"),
-      ).map((row) =>
-        Array.from((row as Element).querySelectorAll("td")).map((td) =>
-          td.textContent.trim()
-        )
+        (row) =>
+          Array.from(
+            (row as Element).querySelectorAll("td"),
+            (td) => (trim ? td.textContent.trim() : td.textContent),
+          ),
       );
 
-      return result.filter((row) => row.length > 0);
+      return result.filter(Boolean).filter((row) => row.length > 0);
     },
   },
   tag: {
@@ -103,71 +112,85 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
     args: { selector },
     resolve(element: Element, { selector }: ElementParams) {
       element = selector ? element.querySelector(selector)! : element;
-
-      return element && element.tagName;
+      return element?.tagName ?? null;
     },
   },
   attr: {
     type: GraphQLString,
-    description: "The value of a given attribute from the selected node (`href`, `src`, etc.), if it exists.",
+    description:
+      "The value of a given attribute from the selected node (`href`, `src`, etc.), if it exists.",
     args: {
       selector,
       name: {
         type: new GraphQLNonNull(GraphQLString),
         description: "The name of the attribute",
       },
+      trim: {
+        type: GraphQLBoolean,
+        description:
+          "Trim any leading and trailing whitespace from the value (optional, default: false)",
+        defaultValue: false,
+      },
     },
-    resolve(element: Element, { selector, name }: TParams) {
+    resolve(element: Element, { selector, name, trim }: TParams) {
       element = selector ? element.querySelector(selector)! : element;
-      if (element == null || name == null) {
-        return null;
-      }
-
-      const attribute = element.getAttribute(name);
-      if (attribute == null) {
-        return null;
-      }
-
-      return attribute;
+      return getAttributeOfElement(element, name as string, trim);
     },
   },
   href: {
     type: GraphQLString,
-    description: "Shorthand for `attr(name: \"href\")`",
+    description: "Shorthand for `attr(name: 'href')`",
     args: {
       selector,
+      trim: {
+        type: GraphQLBoolean,
+        description:
+          "Trim any leading and trailing whitespace from the value (optional, default: false)",
+        defaultValue: false,
+      },
     },
-    resolve(element: Element, { selector }: ElementParams) {
+    resolve(element: Element, { selector, trim }: TextParams) {
       element = selector ? element.querySelector(selector)! : element;
-      if (element == null) return null;
-
-      return getAttributeOfElement(element, "href");
+      return getAttributeOfElement(element, "href", trim);
     },
   },
   src: {
     type: GraphQLString,
-    description: "Shorthand for `attr(name: \"src\")`",
+    description: "Shorthand for `attr(name: 'src')`",
     args: {
       selector,
+      trim: {
+        type: GraphQLBoolean,
+        description:
+          "Trim any leading and trailing whitespace from the value (optional, default: false)",
+        defaultValue: false,
+      },
     },
-    resolve(element: Element, { selector }: ElementParams) {
+    resolve(element: Element, { selector, trim }: TextParams) {
       element = selector ? element.querySelector(selector)! : element;
       if (element == null) return null;
 
-      return getAttributeOfElement(element, "src");
+      return getAttributeOfElement(element, "src", trim);
     },
   },
   class: {
     type: GraphQLString,
-    description: "The class attribute of the selected node, if any exists. Formatted as a space-separated list of CSS class names.",
+    description:
+      "The class attribute of the selected node, if any exists. Formatted as a space-separated list of CSS class names.",
     args: {
       selector,
+      trim: {
+        type: GraphQLBoolean,
+        description:
+          "Trim any leading and trailing whitespace from the value (optional, default: false)",
+        defaultValue: false,
+      },
     },
-    resolve(element: Element, { selector }: TParams) {
+    resolve(element: Element, { selector, trim }: TextParams) {
       element = selector ? element.querySelector(selector)! : element;
       if (element == null) return null;
 
-      return getAttributeOfElement(element, "class");
+      return getAttributeOfElement(element, "class", trim);
     },
   },
   classList: {
@@ -179,16 +202,13 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
     resolve(element: Element, { selector }: ElementParams) {
       element = selector ? element.querySelector(selector)! : element;
       if (element == null) return null;
-
-      const attribute = getAttributeOfElement(element, "class");
-      if (attribute == null) return null;
-
-      return attribute.split(" ");
+      return [...(element?.classList.values() ?? [])];
     },
   },
   has: {
     type: GraphQLBoolean,
-    description: "Returns true if an element with the given selector exists, otherwise false.",
+    description:
+      "Returns true if an element with the given selector exists, otherwise false.",
     args: { selector },
     resolve(element: Element, { selector }: ElementParams) {
       return !!element.querySelector(selector!);
@@ -196,7 +216,8 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   count: {
     type: GraphQLInt,
-    description: "Returns the number of DOM nodes that match the given selector, or 0 if no nodes match.",
+    description:
+      "Returns the number of DOM nodes that match the given selector, or 0 if no nodes match.",
     args: { selector },
     resolve(element: Element, { selector }: ElementParams) {
       if (!selector) return 0;
@@ -231,7 +252,8 @@ export const shared: GraphQLFieldConfigMap<Element, any> = {
   },
   childNodes: {
     type: new GraphQLList(TElement),
-    description: "Child nodes (not elements) of a selected node, including any text nodes.",
+    description:
+      "Child nodes (not elements) of a selected node, including any text nodes.",
     resolve(element: Element) {
       return Array.from(element.childNodes);
     },
