@@ -10,7 +10,7 @@ import { getAttributeOfElement, resolveURL } from "./helpers.ts";
 import { TNode } from "./node.ts";
 import { TDocument } from "./document.ts";
 import { selector } from "./selector.ts";
-import { shared } from "./shared.ts";
+import { shared } from "./fields.ts";
 
 export const TElement = new GraphQLObjectType({
   name: "Element",

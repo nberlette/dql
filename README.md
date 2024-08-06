@@ -2,7 +2,7 @@
 
 # [🦕 DQL](https://deno.land/x/dql)
 
-### _**Web Scraping with Deno  –  DOM + GraphQL**_
+### _**Web Scraping with Deno  –  DOM + GraphQL** (beta)_
 
 </div>
 
@@ -16,7 +16,7 @@
 - [x] Modular project structure (as opposed to a mostly single-file design)
 - [x] Improved types and schema structure
 
-> **Note**: _This is a work-in-progress and there is still a lot to be done._
+> **Warning**: _**This project is currently in **beta**. The pre-1.0 API may experience breaking changes between versions, and you are encouraged to pin your versions.**_
 
 ### 🛝  [**`GraphQL Playground`**](https://dql.deno.dev)
 
